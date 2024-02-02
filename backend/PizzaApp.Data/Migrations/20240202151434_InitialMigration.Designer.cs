@@ -11,8 +11,8 @@ using PizzaApp.Data;
 namespace PizzaApp.Data.Migrations
 {
     [DbContext(typeof(PizzaDbContext))]
-    [Migration("20240201232532_SeededInitialData")]
-    partial class SeededInitialData
+    [Migration("20240202151434_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,19 +24,19 @@ namespace PizzaApp.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DoughProductType", b =>
+            modelBuilder.Entity("DoughProduct", b =>
                 {
                     b.Property<int>("DoughsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductTypesId")
+                    b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
-                    b.HasKey("DoughsId", "ProductTypesId");
+                    b.HasKey("DoughsId", "ProductsId");
 
-                    b.HasIndex("ProductTypesId");
+                    b.HasIndex("ProductsId");
 
-                    b.ToTable("DoughProductTypes", (string)null);
+                    b.ToTable("ProductDoughs", (string)null);
                 });
 
             modelBuilder.Entity("IngredientProduct", b =>
@@ -52,6 +52,27 @@ namespace PizzaApp.Data.Migrations
                     b.HasIndex("ProductsId");
 
                     b.ToTable("ProductIngredients", (string)null);
+                });
+
+            modelBuilder.Entity("PizzaApp.Domain.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("PizzaApp.Domain.Dough", b =>
@@ -73,18 +94,6 @@ namespace PizzaApp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Doughs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Traditional"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Subtire"
-                        });
                 });
 
             modelBuilder.Entity("PizzaApp.Domain.Ingredient", b =>
@@ -116,6 +125,9 @@ namespace PizzaApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -124,18 +136,12 @@ namespace PizzaApp.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("Name")
                         .IsUnique();
-
-                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("Products");
                 });
@@ -151,6 +157,11 @@ namespace PizzaApp.Data.Migrations
                     b.Property<int>("Counter")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -162,49 +173,6 @@ namespace PizzaApp.Data.Migrations
                     b.HasIndex("SizeId");
 
                     b.ToTable("ProductSizes");
-                });
-
-            modelBuilder.Entity("PizzaApp.Domain.ProductType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("ProductTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Pizza"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Bauturi"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Cafea"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Sosuri"
-                        });
                 });
 
             modelBuilder.Entity("PizzaApp.Domain.Size", b =>
@@ -229,35 +197,9 @@ namespace PizzaApp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Sizes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Measure = 25,
-                            Name = "Mica"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Measure = 30,
-                            Name = "Medie"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Measure = 35,
-                            Name = "Mare"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Measure = 0,
-                            Name = "Party"
-                        });
                 });
 
-            modelBuilder.Entity("DoughProductType", b =>
+            modelBuilder.Entity("DoughProduct", b =>
                 {
                     b.HasOne("PizzaApp.Domain.Dough", null)
                         .WithMany()
@@ -265,9 +207,9 @@ namespace PizzaApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PizzaApp.Domain.ProductType", null)
+                    b.HasOne("PizzaApp.Domain.Product", null)
                         .WithMany()
-                        .HasForeignKey("ProductTypesId")
+                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -289,13 +231,13 @@ namespace PizzaApp.Data.Migrations
 
             modelBuilder.Entity("PizzaApp.Domain.Product", b =>
                 {
-                    b.HasOne("PizzaApp.Domain.ProductType", "ProductType")
+                    b.HasOne("PizzaApp.Domain.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("ProductTypeId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductType");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("PizzaApp.Domain.ProductSize", b =>
@@ -317,14 +259,14 @@ namespace PizzaApp.Data.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("PizzaApp.Domain.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("PizzaApp.Domain.Product", b =>
                 {
                     b.Navigation("ProductSizes");
-                });
-
-            modelBuilder.Entity("PizzaApp.Domain.ProductType", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("PizzaApp.Domain.Size", b =>

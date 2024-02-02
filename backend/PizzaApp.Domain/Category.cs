@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 
 namespace PizzaApp.Domain
 {
-    public class ProductType
+    public class Category
     {
         public int Id { get; set; }
 
@@ -11,6 +11,5 @@ namespace PizzaApp.Domain
         [MaxLength(100)]
         public string Name { get; set; }
         public List<Product>? Products { get; set; } = [];
-        public List<Dough>? Doughs { get; set; } = [];
     }
 }

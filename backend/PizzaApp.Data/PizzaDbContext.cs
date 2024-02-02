@@ -13,7 +13,8 @@ namespace PizzaApp.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSize> ProductSizes { get; set; }
         public DbSet<Size> Sizes { get; set; }
-        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProductSize>()
@@ -30,9 +31,9 @@ namespace PizzaApp.Data
                 .HasForeignKey(x => x.SizeId);
 
             modelBuilder.Entity<Dough>()
-                .HasMany(x => x.ProductTypes)
+                .HasMany(x => x.Products)
                 .WithMany(x => x.Doughs)
-                .UsingEntity(x => x.ToTable("DoughProductTypes"));  //only for setting the name for generated table
+                .UsingEntity(x => x.ToTable("ProductDoughs"));  //only for setting the name for generated table
 
             modelBuilder.Entity<Ingredient>()
                 .HasMany(x => x.Products)
@@ -51,7 +52,7 @@ namespace PizzaApp.Data
               .HasIndex(x => x.Name)
               .IsUnique();
 
-            modelBuilder.Entity<ProductType>()
+            modelBuilder.Entity<Category>()
              .HasIndex(x => x.Name)
              .IsUnique();
 
