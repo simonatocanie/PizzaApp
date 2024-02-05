@@ -4,12 +4,13 @@ using PizzaApp.DataAccess.Repos.Contracts;
 using PizzaApp.DataAccess.Repos;
 using PizzaApp.BusinessLogic.Services;
 using PizzaApp.BusinessLogic.Services.Contracts;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<PizzaDbContext>(
+builder.Services.AddDbContext<LocalDbContext>(
 options =>
     {
         options.UseSqlServer(builder.Configuration["ConnectionStrings:ConnectionString"]);
@@ -38,7 +39,11 @@ builder.Services.AddScoped<IProductsService, ProductsService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -11,5 +11,6 @@ namespace PizzaApp.Domain
         [MaxLength(100)]
         public string Name { get; set; }
         public List<Product>? Products { get; set; } = [];
+        public List<Dough> Doughs { get; set; } = [];
     }
 }

@@ -10,10 +10,11 @@ namespace PizzaApp.Domain
         [MaxLength(100)]
         public string Name { get; set; }
         public string? Description { get; set; }
+        public string ImagePath { get; set; }
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = new();
+        public bool IsDeleted { get; set; }
+        public Category? Category { get; set; }
         public List<Ingredient> Ingredients { get; set; } = [];
         public List<ProductSize> ProductSizes { get; set; } = [];
-        public List<Dough> Doughs { get; set; } = [];
     }
 }

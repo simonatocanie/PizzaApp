@@ -42,6 +42,15 @@ namespace PizzaApp.Data.Migrations
                     { 3, 35, "Mare" },
                     { 4, 0, "Party" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "CategoryDough",
+                columns: new[] { "CategoryId", "DoughId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 2 }
+                });
         }
 
         /// <inheritdoc />
@@ -50,11 +59,6 @@ namespace PizzaApp.Data.Migrations
             migrationBuilder.DeleteData(
                 table: "Categories",
                 keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Categories",
-                keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.DeleteData(
@@ -68,14 +72,14 @@ namespace PizzaApp.Data.Migrations
                 keyValue: 4);
 
             migrationBuilder.DeleteData(
-                table: "Doughs",
-                keyColumn: "Id",
-                keyValue: 1);
+                table: "CategoryDough",
+                keyColumns: new[] { "CategoryId", "DoughId" },
+                keyValues: new object[] { 1, 1 });
 
             migrationBuilder.DeleteData(
-                table: "Doughs",
-                keyColumn: "Id",
-                keyValue: 2);
+                table: "CategoryDough",
+                keyColumns: new[] { "CategoryId", "DoughId" },
+                keyValues: new object[] { 1, 2 });
 
             migrationBuilder.DeleteData(
                 table: "Sizes",
@@ -96,6 +100,21 @@ namespace PizzaApp.Data.Migrations
                 table: "Sizes",
                 keyColumn: "Id",
                 keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "Categories",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "Doughs",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "Doughs",
+                keyColumn: "Id",
+                keyValue: 2);
         }
     }
 }
