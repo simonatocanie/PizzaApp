@@ -7,11 +7,22 @@
 namespace PizzaApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class SeededInitialData : Migration
+    public partial class InitialSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Food" },
+                    { 2, "Bauturi" },
+                    { 3, "Cafea" },
+                    { 4, "Sosuri" }
+                });
+
             migrationBuilder.InsertData(
                 table: "Doughs",
                 columns: new[] { "Id", "Name" },
@@ -19,17 +30,6 @@ namespace PizzaApp.Data.Migrations
                 {
                     { 1, "Traditional" },
                     { 2, "Subtire" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ProductTypes",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Pizza" },
-                    { 2, "Bauturi" },
-                    { 3, "Cafea" },
-                    { 4, "Sosuri" }
                 });
 
             migrationBuilder.InsertData(
@@ -42,40 +42,44 @@ namespace PizzaApp.Data.Migrations
                     { 3, 35, "Mare" },
                     { 4, 0, "Party" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "CategoryDough",
+                columns: new[] { "CategoryId", "DoughId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 2 }
+                });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "Doughs",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Doughs",
+                table: "Categories",
                 keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.DeleteData(
-                table: "ProductTypes",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "ProductTypes",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "ProductTypes",
+                table: "Categories",
                 keyColumn: "Id",
                 keyValue: 3);
 
             migrationBuilder.DeleteData(
-                table: "ProductTypes",
+                table: "Categories",
                 keyColumn: "Id",
                 keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "CategoryDough",
+                keyColumns: new[] { "CategoryId", "DoughId" },
+                keyValues: new object[] { 1, 1 });
+
+            migrationBuilder.DeleteData(
+                table: "CategoryDough",
+                keyColumns: new[] { "CategoryId", "DoughId" },
+                keyValues: new object[] { 1, 2 });
 
             migrationBuilder.DeleteData(
                 table: "Sizes",
@@ -96,6 +100,21 @@ namespace PizzaApp.Data.Migrations
                 table: "Sizes",
                 keyColumn: "Id",
                 keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "Categories",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "Doughs",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "Doughs",
+                keyColumn: "Id",
+                keyValue: 2);
         }
     }
 }

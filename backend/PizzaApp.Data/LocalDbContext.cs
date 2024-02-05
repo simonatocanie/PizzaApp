@@ -5,17 +5,32 @@ using System.Reflection;
 
 namespace PizzaApp.Data
 {
-    public class PizzaDbContext : DbContext
+    public class LocalDbContext : DbContext
     {
-        public PizzaDbContext(DbContextOptions<PizzaDbContext> options) : base(options) { }
+        public LocalDbContext(DbContextOptions<LocalDbContext> options) : base(options) { }
         public DbSet<Dough> Doughs { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<ProductIngredient> ProductIngredients { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductSize> ProductSizes { get; set; }
         public DbSet<Size> Sizes { get; set; }
-        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Dough>()
+                .HasMany(x => x.Category)
+                .WithMany(x => x.Doughs)
+                .UsingEntity<CategoryDough>(); 
+
+            modelBuilder.Entity<Dough>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
             modelBuilder.Entity<ProductSize>()
                 .HasKey(x => new { x.ProductId, x.SizeId });
 
@@ -29,35 +44,25 @@ namespace PizzaApp.Data
                 .WithMany(x => x.ProductSizes)
                 .HasForeignKey(x => x.SizeId);
 
-            modelBuilder.Entity<Dough>()
-                .HasMany(x => x.ProductTypes)
-                .WithMany(x => x.Doughs)
-                .UsingEntity(x => x.ToTable("DoughProductTypes"));  //only for setting the name for generated table
-
-            modelBuilder.Entity<Ingredient>()
-                .HasMany(x => x.Products)
-                .WithMany(x => x.Ingredients)
-                .UsingEntity(x => x.ToTable("ProductIngredients"));
-
-            modelBuilder.Entity<Dough>()
-                .HasIndex(x => x.Name)
-                .IsUnique();
-
-            modelBuilder.Entity<Ingredient>()
-              .HasIndex(x => x.Name)
-              .IsUnique();
-
             modelBuilder.Entity<Product>()
-              .HasIndex(x => x.Name)
-              .IsUnique();
-
-            modelBuilder.Entity<ProductType>()
-             .HasIndex(x => x.Name)
-             .IsUnique();
+               .HasIndex(x => x.Name)
+               .IsUnique();
 
             modelBuilder.Entity<Size>()
-             .HasIndex(x => x.Name)
-             .IsUnique();
+               .HasIndex(x => x.Name)
+               .IsUnique();
+
+            modelBuilder.Entity<Ingredient>()
+               .HasMany(x => x.Products)
+               .WithMany(x => x.Ingredients)
+               .UsingEntity<ProductIngredient>();
+
+            modelBuilder.Entity<ProductIngredient>()
+               .HasKey(x => new { x.ProductId, x.IngredientId });
+
+            modelBuilder.Entity<Ingredient>()
+              .HasIndex(x => x.Name)
+              .IsUnique();
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

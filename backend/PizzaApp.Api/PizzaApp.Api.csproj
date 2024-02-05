@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PizzaApp.Data\PizzaApp.Data.csproj" />
+    <ProjectReference Include="..\PizzaApp.Services\PizzaApp.BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>

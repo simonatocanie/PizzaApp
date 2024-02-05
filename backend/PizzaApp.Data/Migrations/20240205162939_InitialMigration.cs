@@ -11,6 +11,19 @@ namespace PizzaApp.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Doughs",
                 columns: table => new
                 {
@@ -37,19 +50,6 @@ namespace PizzaApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sizes",
                 columns: table => new
                 {
@@ -64,30 +64,6 @@ namespace PizzaApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DoughProductTypes",
-                columns: table => new
-                {
-                    DoughsId = table.Column<int>(type: "int", nullable: false),
-                    ProductTypesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DoughProductTypes", x => new { x.DoughsId, x.ProductTypesId });
-                    table.ForeignKey(
-                        name: "FK_DoughProductTypes_Doughs_DoughsId",
-                        column: x => x.DoughsId,
-                        principalTable: "Doughs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DoughProductTypes_ProductTypes_ProductTypesId",
-                        column: x => x.ProductTypesId,
-                        principalTable: "ProductTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -95,16 +71,41 @@ namespace PizzaApp.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductTypeId = table.Column<int>(type: "int", nullable: false)
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_ProductTypes_ProductTypeId",
-                        column: x => x.ProductTypeId,
-                        principalTable: "ProductTypes",
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoryDough",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    DoughId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryDough", x => new { x.CategoryId, x.DoughId });
+                    table.ForeignKey(
+                        name: "FK_CategoryDough_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryDough_Doughs_DoughId",
+                        column: x => x.DoughId,
+                        principalTable: "Doughs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -113,21 +114,21 @@ namespace PizzaApp.Data.Migrations
                 name: "ProductIngredients",
                 columns: table => new
                 {
-                    IngredientsId = table.Column<int>(type: "int", nullable: false),
-                    ProductsId = table.Column<int>(type: "int", nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    IngredientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductIngredients", x => new { x.IngredientsId, x.ProductsId });
+                    table.PrimaryKey("PK_ProductIngredients", x => new { x.ProductId, x.IngredientId });
                     table.ForeignKey(
-                        name: "FK_ProductIngredients_Ingredients_IngredientsId",
-                        column: x => x.IngredientsId,
+                        name: "FK_ProductIngredients_Ingredients_IngredientId",
+                        column: x => x.IngredientId,
                         principalTable: "Ingredients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductIngredients_Products_ProductsId",
-                        column: x => x.ProductsId,
+                        name: "FK_ProductIngredients_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -161,9 +162,15 @@ namespace PizzaApp.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoughProductTypes_ProductTypesId",
-                table: "DoughProductTypes",
-                column: "ProductTypesId");
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryDough_DoughId",
+                table: "CategoryDough",
+                column: "DoughId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Doughs_Name",
@@ -178,9 +185,14 @@ namespace PizzaApp.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductIngredients_ProductsId",
+                name: "IX_ProductIngredients_IngredientId",
                 table: "ProductIngredients",
-                column: "ProductsId");
+                column: "IngredientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_Name",
@@ -189,20 +201,9 @@ namespace PizzaApp.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_ProductTypeId",
-                table: "Products",
-                column: "ProductTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductSizes_SizeId",
                 table: "ProductSizes",
                 column: "SizeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductTypes_Name",
-                table: "ProductTypes",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sizes_Name",
@@ -215,7 +216,7 @@ namespace PizzaApp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DoughProductTypes");
+                name: "CategoryDough");
 
             migrationBuilder.DropTable(
                 name: "ProductIngredients");
@@ -236,7 +237,7 @@ namespace PizzaApp.Data.Migrations
                 name: "Sizes");
 
             migrationBuilder.DropTable(
-                name: "ProductTypes");
+                name: "Categories");
         }
     }
 }
