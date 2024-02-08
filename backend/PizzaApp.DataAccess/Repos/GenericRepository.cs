@@ -2,16 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using PizzaApp.DataAccess.Repos.Contracts;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Logging;
 
 namespace PizzaApp.DataAccess.Repos
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly LocalDbContext dbContext;
+        private readonly ILogger<GenericRepository<T>> logger;
 
-        public GenericRepository(LocalDbContext dbContext)
+        public GenericRepository(LocalDbContext dbContext, ILogger<GenericRepository<T>> logger)
         {
             this.dbContext = dbContext;
+            this.logger = logger;
         }
 
         public IQueryable<T> GetAllAsync(params Expression<Func<T, object>>[] includes)
@@ -67,8 +70,8 @@ namespace PizzaApp.DataAccess.Repos
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw;
+                logger.LogInformation(ex.Message);
+                throw new Exception($"There was an unexpected exception when saving to database for {typeof(T)}.");
             }
         }
     }

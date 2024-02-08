@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PizzaApp.Data;
 using PizzaApp.DataAccess.Helpers;
 using PizzaApp.DataAccess.Repos.Contracts;
@@ -10,7 +11,7 @@ namespace PizzaApp.DataAccess.Repos
     {
         private readonly LocalDbContext dbContext;
 
-        public ProductsRepository(LocalDbContext dbContext) : base(dbContext)
+        public ProductsRepository(LocalDbContext dbContext, ILogger<ProductsRepository> logger) : base(dbContext, logger)
         {
             this.dbContext = dbContext;
         }

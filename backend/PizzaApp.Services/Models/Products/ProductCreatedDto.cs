@@ -1,10 +1,12 @@
 ﻿using PizzaApp.BusinessLogic.Models.Ingredients;
 using PizzaApp.BusinessLogic.Models.ProductSizes;
+using System.ComponentModel.DataAnnotations;
 
 namespace PizzaApp.BusinessLogic.Models.Products
 {
     public class ProductCreatedDto
     {
+        [Required]
         public string Name { get; set; }
         public string? Description { get; set; }
         public string ImagePath { get; set; }
