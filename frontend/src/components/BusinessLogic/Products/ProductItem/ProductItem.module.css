@@ -1,0 +1,38 @@
+.column {
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  text-align: center;
+  width: 95%;
+  box-sizing: border-box;
+  margin: 10px;
+
+  p {
+    margin: 3px 0px;
+  }
+
+  img {
+    width: 30%;
+    align-items: center;
+  }
+
+  .inline {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 30px;
+
+    p.price {
+      float: left;
+      align-self: center;
+    }
+
+    .button-details {
+      align-self: self-end;
+
+      button:last-child {
+        margin-left: 10px;
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+.form-group,
+.inline-2 {
+    float: left;
+    margin: 10px auto;
+
+    input,
+    select {
+        &.form-control {
+            padding: 9px;
+            border-radius: 3px;
+            border: 1.5px solid #b0a6a6;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        button {
+            float: left;
+        }
+    }
+
+    label {
+        padding-top: 7px;
+    }
+}
+
+.search-group {
+    margin: 10px auto;
+    width: 100%;
+    display: grid;
+    grid: 1fr/ min-content 7fr;
+
+    label {
+        margin: 0px 10px;
+    }
+}
+
+
+.form-group {
+    width: 100%;
+    display: grid;
+    grid: 1fr/ 2fr 7fr;
+
+    p {
+        width: 100%;
+        grid-column: span 2;
+        text-align: left;
+        margin: 0px 0px 0px 22%;
+    }
+}
+
+.inline-2 {
+    display: flex;
+    width: 50%;
+    display: grid;
+    grid: 1fr / 175px 2fr;
+
+
+    input {
+        margin-left: 15px;
+        width: 92%;
+        justify-content: flex-end;
+
+        &:first-of-type {
+            float: left;
+        }
+
+        &:last-of-type {
+            float: right;
+            justify-content: end;
+        }
+    }
+}
