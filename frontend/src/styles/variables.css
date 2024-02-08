@@ -1,0 +1,12 @@
+* {
+    --primary-bg-color:  #7c81cf;
+    --dark-gray: #434242;
+    --main-bg-color: #fcfcfc; /*light gray*/
+
+    --btn-primary:  #5c62d4;
+    --btn-primary-hover:#9da1e2;
+    --btn-light:  #d0cfcf;
+    --btn-light-hover:#a4a2a2;
+    --btn-info:  #96bcfe;
+    --btn-info-hover:#506b9b;
+}

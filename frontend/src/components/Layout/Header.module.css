@@ -1,0 +1,32 @@
+header {
+    nav ul {
+        vertical-align: center;
+        list-style-type: none;
+        display: inline;
+        margin: 0px;
+
+        li {
+            margin: 0px 15px;
+            float: left;
+
+            a {
+                text-decoration: none;
+                color: white;
+                font-weight: 500;
+
+                &:hover {
+                    color: #b6b6b6;
+                }
+
+                &.active {
+                    color: #1f1f1f;
+                }
+            }
+        }
+    }
+
+    nav ul.align-right {
+        float: right;
+        color: rgb(195, 67, 67);
+    }
+}

@@ -1,0 +1,58 @@
+.product-details {
+    width: 100%;
+    display: grid;
+    grid: 1fr/ 1fr 2fr;
+    margin: 30px 0px;
+
+    img {
+        float: left;
+        width: 80%;
+    }
+
+    p {
+        margin: 5px 0px;
+        display: block;
+    }
+
+    .ingredients {
+
+        width: 100%;
+
+        section {
+            color: var(--btn-primary);
+            border: 1px solid gray;
+            padding: 2px 7px;
+            border-radius: 5px;
+            width: fit-content;
+            float: left;
+            margin: 5px 2.5px;
+            min-width: 60px;
+        }
+    }
+
+    .sizes {
+        width: 100%;
+
+        section {
+            padding: 0px 5px;
+            float: left;
+
+            &:first-of-type {
+                padding: 0px;
+            }
+
+            &::after {
+                content: ",";
+            }
+
+            &:last-of-type::after{
+                content: "";
+            }
+        }
+    }
+
+    div {
+        display: block;
+        float: left;
+    }
+}

@@ -1,0 +1,35 @@
+html,
+body,
+.layout {
+  height: 100%;
+  display: grid;
+}
+
+.layout {
+  grid: min-content auto min-content/ 1fr;
+}
+
+header {
+  color: white;
+  padding: 20px 7%;
+  background-color: var(--primary-bg-color);
+  position: sticky;
+  top: 0;
+}
+
+main {
+  margin: 0px 6.5%;
+  padding: 40px 20px 80px 20px;
+  height: fit-content;
+  /* background-color: var(--main-bg-color); */
+}
+
+footer {
+  color: white;
+  padding: 20px 0px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--dark-gray);
+}
