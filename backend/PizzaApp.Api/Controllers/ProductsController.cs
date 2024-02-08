@@ -45,6 +45,11 @@ namespace PizzaApp.Controllers
         {
             var productDto = await productService.AddProductAsync(createdPoduct);
 
+            if (productDto == null)
+            {
+                return BadRequest($"There was an unexpected exception when saving to database for product {createdPoduct.Name}.");
+            }
+
             return Ok(productDto);
         }
 

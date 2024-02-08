@@ -34,13 +34,19 @@ namespace PizzaApp.BusinessLogic.Services
             return mapper.Map<ProductDetailDto>(product);
         }
 
-        public async Task<ProductDto> AddProductAsync(ProductCreatedDto createdPoduct)
+        public async Task<ProductDto?> AddProductAsync(ProductCreatedDto createdPoduct)
         {
-            var product = mapper.Map<Product>(createdPoduct);
-            await productRepo.AddEntityAsync(product);
+            try
+            {
+                var product = mapper.Map<Product>(createdPoduct);
+                await productRepo.AddEntityAsync(product);
 
-            return mapper.Map<ProductDto>(product); ;
-
+                return mapper.Map<ProductDto>(product); ;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<bool?> UpdateProductAsync(ProductUpdateddDto updatedPoduct)

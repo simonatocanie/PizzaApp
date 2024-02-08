@@ -7,7 +7,7 @@ namespace PizzaApp.BusinessLogic.Services.Contracts
     {
         Task<IEnumerable<ProductDto>> GetAllProductsAsync();
         Task<ProductDetailDto> GetProductByIdAsync(int id);
-        Task<ProductDto> AddProductAsync(ProductCreatedDto createdPoduct);
+        Task<ProductDto?> AddProductAsync(ProductCreatedDto createdPoduct);
         Task<bool?> UpdateProductAsync(ProductUpdateddDto updatedPoduct);
         Task<bool?> DeleteProductAsync(int id);
     }
